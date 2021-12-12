@@ -13,7 +13,7 @@ const authRouter = require("./routers/authentication");
 const app = express();
 
 //test de connexion à la BDD
-const database = new sequelize(`mysql://${config.db.username}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.name}`);
+const database = new sequelize(`mysql://${config.db.username}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.database}`);
 database.authenticate().then(() => {
     console.log("Connection à la base de donnée éffectuée !");
 }).catch(() => {

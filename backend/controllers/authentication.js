@@ -13,25 +13,25 @@ const saltRounds = 10;
 //Fonction appelée par la route signup
 exports.signup = (request, response) => {
     let newUser = {};
-    Bcrypt.hash(request.body.password, saltRounds).then(hash => {
-        newUser = {
-            name: request.body.name,
-            email: Crypto.sha256(request.body.email),
-            password: hash,
-            avatar: request.body.avatar,
-            isadmin: 0
+    Models.User.findOne({
+        attributes: ["email", "name"],
+        where: {
+            "email": Crypto.sha256(request.body.email)
         }
-        Models.User.findOne({
-            attributes: ["email", "name"],
-            where: {
-                "email": Crypto.sha256(request.body.email)
-            }
-        }).then(result => {
-            if (result) {
-                response.status(400).json({
-                    "message": "Utilisateur existant !"
-                });
-            } else {
+    }).then(result => {
+        if (result) {
+            response.status(400).json({
+                "message": "Ce compte existe déjà !"
+            });
+        } else {
+            Bcrypt.hash(request.body.password, saltRounds).then(hash => {
+                newUser = {
+                    name: request.body.name,
+                    email: Crypto.sha256(request.body.email),
+                    password: hash,
+                    avatar: request.body.avatar,
+                    isadmin: 0
+                }
                 Models.User.create(newUser).then(result => {
                     response.status(200).json({
                         "message": "Utilisateur créé !"
@@ -41,13 +41,13 @@ exports.signup = (request, response) => {
                         "message": error
                     })
                 })
-            }
-        })
-    }).catch(error => {
-        response.status(500).json({
-            "message": error
-        });
-    });
+            }).catch(error => {
+                response.status(500).json({
+                    "message": error
+                });
+            });
+        }
+    })
 };
 
 //Fonction appelée par la route login

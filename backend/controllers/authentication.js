@@ -51,4 +51,40 @@ exports.signup = (request, response) => {
 };
 
 //Fonction appelée par la route login
-exports.login = (request, response) => {};
+exports.login = (request, response) => {
+    Models.User.findOne({
+        attributes: ["email", "id", "password"],
+        where: {
+            "email": Crypto.sha256(request.body.email)
+        }
+    }).then(result => {
+        if (!result) {
+            return response.status(401).json({
+                message: "Cet identifiant est introuvable !"
+            });
+        }
+        Bcrypt.compare(request.body.password, result.password).then(valid => {
+            if (!valid) {
+                return response.status(401).json({
+                    message: "Mot de passe incorrect !"
+                });
+            }
+            response.status(200).json({
+                userId: result.id,
+                token: Token.sign({
+                        userId: result.id
+                    },
+                    config.jwt.secret, {
+                        expiresIn: config.jwt.expiration
+                    }
+                )
+            });
+        }).catch(error => {
+            response.status(500).json(error);
+            console.error(error);
+        })
+    }).catch(error => {
+        response.status(500).json(error);
+        console.error(error);
+    });
+};

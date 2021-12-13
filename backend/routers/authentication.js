@@ -3,7 +3,7 @@ const express = require("express");
 //Création du routeur
 const router = express.Router();
 //Import du controlleur
-const authController = require("../controllers/authentication");
+const authController = require("../controllers/authentications");
 
 //Enregistrement d'un nouvel utilisateur
 router.post("/signup", authController.signup);

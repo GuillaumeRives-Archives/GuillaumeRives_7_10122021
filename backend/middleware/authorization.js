@@ -1,5 +1,5 @@
 //Inclusion des variables d'environnement
-const config = require("./config/config.json");
+const config = require("../config/config.json");
 
 //Import des modules
 const Token = require("jsonwebtoken");

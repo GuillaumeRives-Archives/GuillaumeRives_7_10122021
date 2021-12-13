@@ -1,10 +1,10 @@
 //Inclusion des variables d'environnement
-const config = require("./../config/config.json");
+const config = require("../config/config.json");
 
 //Inclusion des modules
-const Models = require("./../models");
+const Models = require("../models");
 const Bcrypt = require("bcryptjs");
-const Crypto = require("./../utils/crypto");
+const Crypto = require("../utils/crypto");
 const Token = require("jsonwebtoken");
 
 //Paramétrage Bcrypt

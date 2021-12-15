@@ -13,7 +13,9 @@ router.post("/profile", authorization, userController.getProfile);
 //Modification des informations de compte
 router.put("/profile/update", authorization, multer, userController.updateProfile);
 //Suppression du compte utilisateur
-router.delete("/profile/deletion", authorization, userController.deleteProfile);
+router.delete("/profile/delete", authorization, userController.deleteProfile);
+//Changement du mot de passe du compte utilisateur
+router.put("/profile/changePassword", authorization, userController.changePassword);
 
 //Export du routeur
 module.exports = router;

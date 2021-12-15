@@ -7,9 +7,6 @@ const Bcrypt = require("bcryptjs");
 const Crypto = require("../utils/crypto");
 const Token = require("jsonwebtoken");
 
-//Paramétrage Bcrypt
-const saltRounds = 10;
-
 //Fonction appelée par la route signup
 exports.signup = (request, response) => {
     let newUser = {};
@@ -24,7 +21,7 @@ exports.signup = (request, response) => {
                 "message": "Ce compte existe déjà !"
             });
         } else {
-            Bcrypt.hash(request.body.password, saltRounds).then(hash => {
+            Bcrypt.hash(request.body.password, config.bcrypt.saltrounds).then(hash => {
                 newUser = {
                     name: request.body.name,
                     email: Crypto.sha256(request.body.email),

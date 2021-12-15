@@ -5,6 +5,9 @@ const config = require("../config/config.json");
 const Models = require("../models");
 const Bcrypt = require("bcryptjs");
 const token = require("jsonwebtoken");
+const {
+    response
+} = require("express");
 
 //Récupération du profil
 exports.getProfile = (request, response) => {
@@ -16,7 +19,7 @@ exports.getProfile = (request, response) => {
     }).then(result => {
         response.status(200).json(result);
     }).catch(error => {
-        response.status(401).json(error);
+        response.status(404).json(error);
     });
 }
 
@@ -35,8 +38,60 @@ exports.updateProfile = (request, response) => {
         });
     }).catch(error => {
         response.status(500).json(error);
-    })
+    });
 }
 
 //Suppression du profil
-exports.deleteProfile = (request, response) => {}
+exports.deleteProfile = (request, response) => {
+    Models.User.destroy({
+        where: {
+            id: token.verify(request.body.token, config.jwt.secret).userId
+        }
+    }).then(() => {
+        response.status(200).json({
+            message: "Votre compte a bien été supprimé !"
+        });
+    }).catch(error => {
+        response.status(500).json(error);
+    });
+}
+
+//Change user password
+exports.changePassword = (request, response) => {
+    Models.User.findOne({
+        attributes: ["password"],
+        where: {
+            id: token.verify(request.body.token, config.jwt.secret).userId
+        }
+    }).then(result => {
+        Bcrypt.compare(request.body.currPassword, result.password).then(valid => {
+            if (valid) {
+                Bcrypt.hash(request.body.newPassword, config.bcrypt.saltrounds).then(hash => {
+                    Models.User.update({
+                        password: hash
+                    }, {
+                        where: {
+                            id: token.verify(request.body.token, config.jwt.secret).userId
+                        }
+                    }).then(() => {
+                        response.status(200).json({
+                            message: "Mot de passe modifié avec succès"
+                        });
+                    }).catch(error => {
+                        response.status(500).json(error);
+                    });
+                }).catch(error => {
+                    response.status(500).json(error);
+                });
+            } else {
+                response.status(500).json({
+                    message: "Mot de passe incorrect !"
+                });
+            }
+        })
+    }).catch(() => {
+        response.status(404).json({
+            message: "Ce compte n'existe pas !"
+        });
+    });
+}

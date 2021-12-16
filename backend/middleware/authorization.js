@@ -13,6 +13,7 @@ module.exports = (request, response, next) => {
         if (request.body.userId && request.body.userId !== userId) {
             throw "User ID invalide !";
         } else {
+            response.locals.userId = userId;
             next();
         }
     } catch (error) {

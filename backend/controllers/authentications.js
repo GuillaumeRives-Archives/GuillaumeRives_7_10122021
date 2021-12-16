@@ -26,7 +26,7 @@ exports.signup = (request, response) => {
                     name: request.body.name,
                     email: Crypto.sha256(request.body.email),
                     password: hash,
-                    avatar: request.body.avatar,
+                    avatar: `${request.protocol}://${request.get("host")}/images/defaultAvatar.png`,
                     isadmin: 0
                 }
                 Models.User.create(newUser).then(result => {

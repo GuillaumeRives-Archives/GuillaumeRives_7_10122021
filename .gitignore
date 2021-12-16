@@ -1,5 +1,8 @@
 #Backend
 backend/node_modules
 backend/config
+backend/images/avatars/*
+!backend/images/avatars/defaultAvatar.png
+backend/images/posts/*
 
 #Frontend

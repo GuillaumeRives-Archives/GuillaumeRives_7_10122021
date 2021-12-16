@@ -6,12 +6,12 @@ const router = express.Router();
 const userController = require("../controllers/users");
 //Import des middlewares
 const authorization = require("../middleware/authorization");
-const multer = require("../middleware/multer");
+const avatar = require("../middleware/avatar");
 
 //Récupératgion des informations de compte
 router.post("/profile", authorization, userController.getProfile);
 //Modification des informations de compte
-router.put("/profile/update", authorization, multer, userController.updateProfile);
+router.put("/profile/update", authorization, avatar, userController.updateProfile);
 //Suppression du compte utilisateur
 router.delete("/profile/delete", authorization, userController.deleteProfile);
 //Changement du mot de passe du compte utilisateur

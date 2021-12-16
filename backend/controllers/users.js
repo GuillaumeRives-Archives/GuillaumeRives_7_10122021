@@ -28,15 +28,15 @@ exports.updateProfile = (request, response) => {
             id: response.locals.userId
         }
     }).then(user => {
-        const img = user.avatar.split("/images/")[1];
+        const img = user.avatar.split("/images/avatars/")[1];
         if (img != "defaultAvatar.png") {
-            fileSystem.unlink(`images/${img}`, () => {
+            fileSystem.unlink(`images/avatars/${img}`, () => {
                 console.log(`Image ${img} supprimée des resources...`);
             });
         }
         Models.User.update({
             name: request.body.name,
-            avatar: `${request.protocol}: //${request.get("host")}/images/${request.file.filename}`
+            avatar: `${request.protocol}: //${request.get("host")}/images/avatars/${request.file.filename}`
         }, {
             where: {
                 id: response.locals.userId

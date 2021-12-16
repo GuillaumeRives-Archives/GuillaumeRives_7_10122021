@@ -34,7 +34,8 @@ app.use(express.urlencoded({
 }));
 
 //Utilisation du dossier images
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images/avatars", express.static(path.join(__dirname, "images/avatars")));
+app.use("/images/posts", express.static(path.join(__dirname, "images/posts")));
 
 //Application des routes
 app.use("/api/authentication", authRouter);

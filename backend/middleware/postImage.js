@@ -6,13 +6,14 @@ const uuid = require("uuid");
 const MIME_TYPES = {
     "image/jpg": "jpg",
     "image/jpeg": "jpg",
-    "image/png": "png"
+    "image/png": "png",
+    "image/gif": "gif"
 }
 
 //Définition de la configuration de multer
 const storage = multer.diskStorage({
     destination: (_request, _file, callback) => {
-        callback(null, "images")
+        callback(null, "images/posts")
     },
     filename: (_request, file, callback) => {
         const extension = MIME_TYPES[file.mimetype];

@@ -4,7 +4,8 @@ const config = require("../config/config.json");
 //Inclusion des modules
 const Models = require("../models");
 const Bcrypt = require("bcryptjs");
-const fileSystem = require("fs");
+const FileSystem = require("fs");
+const Jimp = require("jimp");
 
 //Récupération du profil
 exports.getProfile = (_request, response) => {
@@ -30,23 +31,30 @@ exports.updateProfile = (request, response) => {
     }).then(user => {
         const img = user.avatar.split("/images/avatars/")[1];
         if (img != "defaultAvatar.png") {
-            fileSystem.unlink(`images/avatars/${img}`, () => {
+            FileSystem.unlink(`images/avatars/${img}`, () => {
                 console.log(`Image ${img} supprimée des resources...`);
             });
         }
-        Models.User.update({
-            name: request.body.name,
-            avatar: `${request.protocol}: //${request.get("host")}/images/avatars/${request.file.filename}`
-        }, {
-            where: {
-                id: response.locals.userId
-            }
-        }).then(() => {
-            response.status(200).json({
-                message: "Informations mises à jour avec succès !"
+        Jimp.read(`./images/avatars/${request.file.filename}`).then(output => {
+            output.cover(config.jimp.avatarWidth, config.jimp.avatarWidth).write(`./images/avatars/${request.file.filename}`);
+            Models.User.update({
+                name: request.body.name,
+                avatar: `${request.protocol}://${request.get("host")}/images/avatars/${request.file.filename}`
+            }, {
+                where: {
+                    id: response.locals.userId
+                }
+            }).then(() => {
+                response.status(200).json({
+                    message: "Informations mises à jour avec succès !"
+                });
+            }).catch(error => {
+                response.status(500).json(error);
             });
-        }).catch(error => {
-            response.status(500).json(error);
+        }).catch(() => {
+            response.status(500).json({
+                message: "Un problème est survenu lors du traitement de votre avatar, votre profil n'a pas été mis à jour."
+            });
         });
     }).catch(() => {
         response.status(404).json({
@@ -63,9 +71,9 @@ exports.deleteProfile = (_request, response) => {
             id: response.locals.userId
         }
     }).then(user => {
-        const img = user.avatar.split("/images/")[1];
+        const img = user.avatar.split("/images/avatars/")[1];
         if (img != "defaultAvatar.png") {
-            fileSystem.unlink(`images/${img}`, () => {
+            FileSystem.unlink(`images/avatars/${img}`, () => {
                 console.log(`Image ${img} supprimée des resources...`);
             });
         }

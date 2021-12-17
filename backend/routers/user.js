@@ -9,13 +9,13 @@ const authorization = require("../middleware/authorization");
 const avatar = require("../middleware/avatar");
 
 //Récupératgion des informations de compte
-router.post("/profile", authorization, userController.getProfile);
+router.post("", authorization, userController.getProfile);
 //Modification des informations de compte
-router.put("/profile/update", authorization, avatar, userController.updateProfile);
+router.put("/update", authorization, avatar, userController.updateProfile);
 //Suppression du compte utilisateur
-router.delete("/profile/delete", authorization, userController.deleteProfile);
+router.delete("/delete", authorization, userController.deleteProfile);
 //Changement du mot de passe du compte utilisateur
-router.put("/profile/changePassword", authorization, userController.changePassword);
+router.put("/changePassword", authorization, userController.changePassword);
 
 //Export du routeur
 module.exports = router;

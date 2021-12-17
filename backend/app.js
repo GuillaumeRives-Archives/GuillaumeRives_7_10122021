@@ -9,6 +9,7 @@ const path = require("path");
 //Inclusion des routeurs
 const authRouter = require("./routers/authentication");
 const userRouter = require("./routers/user");
+const postRouter = require("./routers/post");
 
 //Création de l'application
 const app = express();
@@ -40,6 +41,7 @@ app.use("/images/posts", express.static(path.join(__dirname, "images/posts")));
 //Application des routes
 app.use("/api/authentication", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/posts", postRouter);
 
 
 module.exports = app;

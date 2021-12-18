@@ -11,9 +11,11 @@ const avatar = require("../middleware/avatar");
 //Récupératgion des informations de compte
 router.post("", authorization, userController.getProfile);
 //Modification des informations de compte
-router.put("/update", authorization, avatar, userController.updateProfile);
+router.put("/update", authorization, userController.updateProfile);
 //Suppression du compte utilisateur
 router.delete("/delete", authorization, userController.deleteProfile);
+//Modification de l'avatar
+router.put("/profilePic", authorization, avatar, userController.profilePicture);
 //Changement du mot de passe du compte utilisateur
 router.put("/changePassword", authorization, userController.changePassword);
 

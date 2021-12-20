@@ -6,3 +6,4 @@ backend/images/avatars/*
 backend/images/posts/*
 
 #Frontend
+Frontend/node_modules

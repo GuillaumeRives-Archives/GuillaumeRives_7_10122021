@@ -119,19 +119,60 @@ exports.deleteProfile = (_request, response) => {
         }
     }).then(user => {
         if (user) {
-            const img = user.avatar.split("/images/avatars/")[1];
-            if (img != "defaultAvatar.png") {
-                FileSystem.unlink(`images/avatars/${img}`, () => {
-                    console.log(`Image ${img} supprimée des resources...`);
-                });
-            }
-            Models.User.destroy({
+            //Suppression de ses posts
+            Models.Post.findAll({
+                attributes: ["image"],
                 where: {
-                    id: response.locals.userId
+                    userId: response.locals.userId
                 }
-            }).then(() => {
-                response.status(200).json({
-                    message: "Votre compte a bien été supprimé !"
+            }).then(posts => {
+                if (posts.length) {
+                    posts.forEach(post => {
+                        const img = post.image.split("/images/posts/")[1];
+                        FileSystem.unlink(`images/posts/${img}`, () => {
+                            console.log(`Image ${img} supprimée des resources...`);
+                        });
+                    });
+                    Models.Post.destroy({
+                        where: {
+                            userId: response.locals.userId
+                        }
+                    }).then(() => {
+                        console.log(`Posts de l'utilisatreur ${response.locals.userId} supprimés avec succès...`);
+                    }).catch(() => {
+                        console.error(`Une erreur est survenue lors de la suppression des posts du l'utilisateur ${response.locals.userId}`);
+                    });
+                }
+                //Suppression des likes
+                Models.Like.destroy({
+                    where: {
+                        userId: response.locals.userId
+                    }
+                }).then(() => {
+                    console.log(`Likes de l'utilisateur ${response.locals.userId} supprimé avec succès...`);
+                }).catch(() => {
+                    console.error(`Une erreur est survenue lors de la suppression des likes du l'utilisateur ${response.locals.userId}`);
+                });
+
+                //Suppression de l'avatar de l'utilisateur
+                const img = user.avatar.split("/images/avatars/")[1];
+                if (img != "defaultAvatar.png") {
+                    FileSystem.unlink(`images/avatars/${img}`, () => {
+                        console.log(`Image ${img} supprimée des resources...`);
+                    });
+                }
+
+                //Suppression de l'utilisateur
+                Models.User.destroy({
+                    where: {
+                        id: response.locals.userId
+                    }
+                }).then(() => {
+                    response.status(200).json({
+                        message: "Votre compte a bien été supprimé !"
+                    });
+                }).catch(error => {
+                    response.status(500).json(error);
                 });
             }).catch(error => {
                 response.status(500).json(error);

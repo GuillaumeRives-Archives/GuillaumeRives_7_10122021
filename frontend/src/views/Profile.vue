@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu />
-    <h1>Accueil</h1>
+    <h1>Profil</h1>
   </div>
 </template>
 

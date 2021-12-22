@@ -56,18 +56,17 @@ exports.login = (request, response) => {
         }
     }).then(result => {
         if (!result) {
-            return response.status(401).json({
+            return response.status(403).end({
                 message: "Cet identifiant est introuvable !"
             });
         }
         Bcrypt.compare(request.body.password, result.password).then(valid => {
             if (!valid) {
-                return response.status(401).json({
+                return response.status(403).end({
                     message: "Mot de passe incorrect !"
                 });
             }
             response.status(200).json({
-                userId: result.id,
                 token: Token.sign({
                         userId: result.id
                     },

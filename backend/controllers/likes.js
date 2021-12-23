@@ -8,8 +8,8 @@ const {
 exports.switch = (request, response) => {
     Models.Like.findOne({
         where: {
-            postId: request.body.postId,
-            userId: response.locals.userId
+            PostId: request.body.postId,
+            UserId: response.locals.userId
         }
     }).then(like => {
         if (like) {
@@ -34,8 +34,8 @@ exports.switch = (request, response) => {
             }).then(post => {
                 if (post) {
                     Models.Like.create({
-                        userId: response.locals.userId,
-                        postId: post.id,
+                        UserId: response.locals.userId,
+                        PostId: post.id,
                         likeState: true
                     }).then(() => {
                         response.status(200).json({
@@ -60,7 +60,7 @@ exports.switch = (request, response) => {
 exports.getPostLikes = (request, response) => {
     Models.Like.findAll({
         where: {
-            postId: request.params.id
+            PostId: request.params.id
         }
     }).then(posts => {
         if (posts.length) {

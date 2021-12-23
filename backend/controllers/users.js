@@ -6,14 +6,13 @@ const Models = require("../models");
 const Bcrypt = require("bcryptjs");
 const FileSystem = require("fs");
 const Jimp = require("jimp");
-const exp = require("constants");
 
 //Récupération du profil
-exports.getProfile = (_request, response) => {
+exports.getProfile = (request, response) => {
     Models.User.findOne({
         attributes: ["name", "avatar", "createdAt", "isadmin"],
         where: {
-            id: response.locals.userId
+            id: request.body.userId
         }
     }).then(result => {
         if (result) {

@@ -5,12 +5,13 @@ const config = require("../config/config.json");
 const Models = require("../models");
 const FileSystem = require("fs");
 const Jimp = require("jimp");
+const Sequelize = require("sequelize");
 
 //Création d'un post
 exports.createPost = (request, response) => {
     if (request.file) {
         const newPost = {
-            userId: response.locals.userId,
+            UserId: response.locals.userId,
             title: request.body.title,
             image: `${request.protocol}://${request.get("host")}/images/posts/${request.file.filename}`,
             description: request.body.description
@@ -43,7 +44,15 @@ exports.createPost = (request, response) => {
 
 //Récupération de tous les posts
 exports.getAllPosts = (_request, response) => {
-    Models.Post.findAll().then(result => {
+    Models.Post.findAll({
+        include: [{
+            model: Models.User,
+            model: Models.Like
+        }],
+        order: [
+            ["id", "DESC"]
+        ]
+    }).then(result => {
         response.status(200).json(result);
     }).catch(error => {
         response.status(500).json(error);
@@ -78,7 +87,7 @@ exports.updatePost = (request, response) => {
         }
     }).then(post => {
         if (post) {
-            if (post.userId === response.locals.userId || response.locals.isadmin) {
+            if (post.UserId === response.locals.userId || response.locals.isadmin) {
                 const modifiedPost = {
                     title: request.body.title,
                     description: request.body.description
@@ -112,13 +121,13 @@ exports.updatePost = (request, response) => {
 //Suppression d'un post
 exports.deletePost = (request, response) => {
     Models.Post.findOne({
-        attributes: ["id", "userId", "image"],
+        attributes: ["id", "UserId", "image"],
         where: {
             id: request.body.id
         }
     }).then(post => {
         if (post) {
-            if (post.userId === response.locals.userId || response.locals.isadmin) {
+            if (post.UserId === response.locals.userId || response.locals.isadmin) {
                 const img = post.image.split("/images/posts/")[1];
                 FileSystem.unlink(`images/posts/${img}`, () => {
                     console.log(`Image ${img} supprimée des resources...`);

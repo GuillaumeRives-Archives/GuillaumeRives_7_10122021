@@ -8,7 +8,6 @@
 html,
 body,
 #app {
-  background: rgba(250, 250, 250, 1);
   .link-primary {
     color: #fd2d01;
   }

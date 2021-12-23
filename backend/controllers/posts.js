@@ -46,7 +46,8 @@ exports.createPost = (request, response) => {
 exports.getAllPosts = (_request, response) => {
     Models.Post.findAll({
         include: [{
-            model: Models.User,
+            model: Models.User
+        }, {
             model: Models.Like
         }],
         order: [
@@ -62,6 +63,11 @@ exports.getAllPosts = (_request, response) => {
 //Récupération d'un post
 exports.getPost = (request, response) => {
     Models.Post.findOne({
+        include: [{
+            model: Models.User
+        }, {
+            model: Models.Like
+        }],
         where: {
             id: request.params.id
         }

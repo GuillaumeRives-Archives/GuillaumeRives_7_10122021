@@ -1,5 +1,5 @@
 <template>
-  <header class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+  <header class="navbar navbar-expand-sm navbar-dark fixed-top">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">
         <img src="../assets/images/icon.svg" alt="Groupomania Logo" height="30"> Groupomania
@@ -11,18 +11,18 @@
         <ul class="navbar-nav">
           <li class="nav-item">
             <router-link class="nav-link" :to="{name: 'Home' }" :class="{active: $route.name==='Home'}">
-              <i class="bi bi-images"></i> Explorez
+              <i class="bi bi-card-image"></i> Explorez
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" :to="{name: 'Profile'}" :class="{active: $route.name==='Profile'}">
-              <i class="bi bi-person-fill"></i> Mon profil
+              <i class="bi bi-person"></i> Mon profil
             </router-link>
           </li>
 
           <li class="nav-item">
             <router-link class="nav-link" to="Authenticate" @click="logout()">
-              <i class="bi bi-door-open-fill"></i> Se déconnecter
+              <i class="bi bi-toggle-off"></i> Se déconnecter
             </router-link>
           </li>
         </ul>
@@ -30,6 +30,15 @@
     </div>
   </header>
 </template>
+
+<style lang="scss">
+header {
+  background: rgba(#fd2d01, 0.8);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid darken(rgba(#fd2d01, 0.3), 5);
+}
+</style>
 
 <script>
 export default {

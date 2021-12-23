@@ -1,5 +1,5 @@
 <template>
-  <header class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <header class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">
         <img src="../assets/images/icon.svg" alt="Groupomania Logo" height="30"> Groupomania

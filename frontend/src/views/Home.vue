@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu />
-    <div v-if="posts.length" class="d-flex m-3">
+    <div v-if="posts.length" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 mt-5 justify-content-center m-auto">
       <PostPreview v-for="post in posts" :key="post.id"
       :title="post.title"
       :image="post.image"
@@ -15,7 +15,6 @@
 
 <style lang="scss">
 .card {
-  width: 250px;
   border-radius: 10px !important;
   border: none !important;
 

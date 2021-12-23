@@ -1,6 +1,6 @@
 <template>
-  <a :href="`post/${id}`">
-    <div class="card m-2 shadow">
+  <a class="col" :href="`post/${id}`">
+    <div class="card shadow">
       <img :src="image" :alt="title">
       <span class="author-container">
         <img class="avatar" :src="avatar" :alt="author" width="40" height="40"> {{author}}

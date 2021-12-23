@@ -18,32 +18,37 @@
         </li>
       </ul>
       <div class="tab-content" id="AuthenticateTabsContent">
-      <div class="tab-pane fade show active border-start border-end border-bottom bg-white rounded-bottom shadow-sm text-center" id="login" role="tabpanel" aria-labelledby="login-tab">
-        <form action="POST" class="row p-4">
-          <p class="text-center">Si vous ne disposez pas déjà d'un compte, enregistrez-vous !</p>
-          <div class="col-md-7 m-auto text-start">
-            <input v-model="login_email" type="email" class="form-control" placeholder="Adresse email" aria-label="Adresse email" name="email">
-            <input v-model="login_password" type="password" class="form-control mt-3" placeholder="Mot de passe" aria-label="Mot de passe" name="password">
-            <button @click.prevent="login" class="btn btn-primary mt-3" type="submit">Se connecter</button>
+        <div class="tab-pane fade show active border-start border-end border-bottom bg-white rounded-bottom shadow-sm text-center" id="login" role="tabpanel" aria-labelledby="login-tab">
+          <form action="POST" class="row p-4">
+            <p class="text-center">Si vous ne disposez pas déjà d'un compte, enregistrez-vous !</p>
+            <div class="col-md-7 m-auto text-start">
+              <input v-model="login_email" type="email" class="form-control" placeholder="Adresse email" aria-label="Adresse email" name="email">
+              <input v-model="login_password" type="password" class="form-control mt-3" placeholder="Mot de passe" aria-label="Mot de passe" name="password">
+              <button @click.prevent="login" class="btn btn-primary mt-3" type="submit">Se connecter</button>
+            </div>
+          </form>
+          <div v-if="login_errors.length" class="mt-2 mb-4 ms-2 me-2">
+            <span v-for="error in login_errors" :key="error.index" class="alert" :class="login_error_type"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</span>
           </div>
-        </form>
-        <div v-if="login_errors.length" class="mt-2 mb-4 ms-2 me-2">
-          <span v-for="error in login_errors" :key="error.index" class="alert" :class="login_error_type"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</span>
+        </div>
+        <div class="tab-pane fade border-start border-end border-bottom bg-white rounded-bottom shadow-sm text-center" id="register" role="tabpanel" aria-labelledby="register-tab">
+          <form action="POST" class="row p-4">
+            <p class="text-center">Si vous disposez déjà d'un compte, identifiez-vous !</p>
+            <div class="col-md-7 m-auto text-start">
+              <input v-model="register_email" type="email" class="form-control" placeholder="Adresse email" aria-label="Adresse email" name="email">
+              <input v-model="register_password" type="password" class="form-control mt-3" placeholder="Mot de passe" aria-label="Mot de passe" name="password">
+              <input v-model="register_password_check" type="password" class="form-control mt-3" placeholder="Vérification du mot de passe" aria-label="Vérification du mot de passe" name="passwordCheck">
+              <button @click.prevent="register" class="btn btn-primary mt-3" type="submit">S'enregistrer</button>
+            </div>
+          </form>
+          <div v-if="register_errors.length" class="mt-2 mb-4 ms-2 me-2">
+            <span v-for="error in register_errors" :key="error.index" class="alert" :class="register_error_type"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</span>
+          </div>
         </div>
       </div>
-      <div class="tab-pane fade border-start border-end border-bottom bg-white rounded-bottom shadow-sm text-start" id="register" role="tabpanel" aria-labelledby="register-tab">
-        <form action="POST" class="row p-4">
-          <p class="text-center">Si vous disposez déjà d'un compte, identifiez-vous !</p>
-          <div class="col-md-7 m-auto">
-            <input v-model="register_email" type="email" class="form-control mt-3" placeholder="Adresse email" aria-label="Adresse email" name="email">
-            <input v-model="register_password" type="password" class="form-control mt-3" placeholder="Mot de passe" aria-label="Mot de passe" name="password">
-            <input v-model="register_password_check" type="password" class="form-control mt-3" placeholder="Vérification du mot de passe" aria-label="Vérification du mot de passe" name="passwordCheck">
-            <button @click.prevent="register" class="btn btn-primary mt-3" type="submit">S'enregistrer</button>
-          </div>
-        </form>
-      </div>
     </div>
-    
+    <div class="mt-3">
+      Un problème pour vous authentifier ? <a class="link-primary" target="blank" href="mailto:contact@groupomania.com">contactez nous !</a>
     </div>
   </main>
 </template>
@@ -147,9 +152,7 @@ export default {
               })
               .catch(() => {
                 this.register_error_type = "alert-danger";
-                this.register_errors.push(
-                  "Identifiant ou mot de passe incorrect..."
-                );
+                this.register_errors.push("Cet identifiant existe déjà !");
               });
           } else {
             this.register_error_type = "alert-warning";

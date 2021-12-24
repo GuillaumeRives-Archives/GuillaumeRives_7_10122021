@@ -1,6 +1,5 @@
 //Import des modules
 const Models = require("../models");
-const { post } = require("../routers/like");
 
 //Ajout d'un like
 exports.switch = (request, response) => {

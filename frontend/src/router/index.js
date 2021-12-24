@@ -1,45 +1,43 @@
-import {
-  createRouter,
-  createWebHistory
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue";
 import Authenticate from "../views/Authenticate.vue";
 
-const routes = [{
-    path: "/",
-    name: "Home",
-    component: Home,
-    meta: {
-      title: "Accueil"
-    }
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-    meta: {
-      title: "Votre profil"
-    }
-  },
-  {
-    path: "/authenticate",
-    name: "Authenticate",
-    component: Authenticate,
-    meta: {
-      title: "Identifiez-vous"
-    }
-  }
-]
+const routes = [
+   {
+      path: "/",
+      name: "Home",
+      component: Home,
+      meta: {
+         title: "Accueil",
+      },
+   },
+   {
+      path: "/profile",
+      name: "Profile",
+      component: Profile,
+      meta: {
+         title: "Votre profil",
+      },
+   },
+   {
+      path: "/authenticate",
+      name: "Authenticate",
+      component: Authenticate,
+      meta: {
+         title: "Identifiez-vous",
+      },
+   },
+];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+   history: createWebHistory(),
+   routes,
 });
 
-router.afterEach(to => {
-  document.title = to.meta.title
+router.afterEach((to) => {
+   document.title = to.meta.title;
 });
 
 export default router;

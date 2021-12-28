@@ -5,8 +5,8 @@ Module 7 of the [OpenClassrooms](https://openclassrooms.com/) Web Dev bootcamp. 
 The prerequisites for this module are :
 
 -  Create an API with [Express JS](https://expressjs.com/)
--  Use an SQL ORM ([Sequelize](https://sequelize.org/) is used here)
--  Use a front-end framework ([Vue JS](https://v3.vuejs.org/) is used here)
+-  Use an SQL ORM ([Sequelize](https://sequelize.org/) in this case)
+-  Use a front-end framework ([Vue JS](https://v3.vuejs.org/) in this case)
 
 ## Installation
 

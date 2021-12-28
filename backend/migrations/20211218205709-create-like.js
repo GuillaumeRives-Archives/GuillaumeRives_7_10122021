@@ -14,6 +14,8 @@ module.exports = {
                model: "Users",
                key: "id",
             },
+            onDelete: "no action",
+            onUpdate: "no action",
          },
          postId: {
             type: Sequelize.INTEGER,
@@ -21,6 +23,8 @@ module.exports = {
                model: "Posts",
                key: "id",
             },
+            onDelete: "no action",
+            onUpdate: "no action",
          },
          likeState: {
             type: Sequelize.BOOLEAN,

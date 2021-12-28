@@ -2,7 +2,7 @@
    <header class="navbar navbar-expand-sm navbar-dark fixed-top">
       <div class="container-fluid">
          <router-link class="navbar-brand" to="/">
-            <img src="../assets/images/icon.svg" alt="Groupomania Logo" height="30" />
+            <img src="../../assets/images/icon.svg" alt="Groupomania Logo" height="30" />
             Groupomania
          </router-link>
          <button

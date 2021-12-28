@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Home from "../views/Home.vue";
+import Post from "../views/Post.vue";
 import Profile from "../views/Profile.vue";
 import Authenticate from "../views/Authenticate.vue";
 
@@ -11,6 +12,14 @@ const routes = [
       component: Home,
       meta: {
          title: "Accueil",
+      },
+   },
+   {
+      path: "/post/:id",
+      name: "Post",
+      component: Post,
+      meta: {
+         title: "Post",
       },
    },
    {

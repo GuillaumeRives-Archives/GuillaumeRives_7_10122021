@@ -20,6 +20,7 @@
       border: none !important;
 
       & > img {
+         aspect-ratio: 1/1;
          border-radius: 10px 10px 14px 14px;
          object-fit: cover;
       }

@@ -7,7 +7,7 @@
 <style lang="scss"></style>
 
 <script>
-   import Menu from "../components/Menu.vue";
+   import Menu from "../components/menus/Menu.vue";
 
    export default {
       name: "Home",

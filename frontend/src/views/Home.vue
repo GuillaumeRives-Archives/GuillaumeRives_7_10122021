@@ -9,21 +9,31 @@
             </p>
             <div>
                <p class="link-primary fw-bold">Une image vaut mieux que milles mots ? Alors n'hésitez plus !</p>
-               <button class="btn btn-primary fw-bold">Partagez une image !</button>
+               <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#SendMedia">Partagez une image !</button>
             </div>
          </section>
-         <div v-if="posts.length" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 mt-1 justify-content-center m-auto">
-            <PostPreview
-               v-for="post in posts"
-               :key="post.id"
-               :title="post.title"
-               :image="post.image"
-               :likes="post.Likes.length"
-               :author="post.User.name"
-               :avatar="post.User.avatar"
-               :id="post.id"
-            />
-         </div>
+         <SendMedia :id="'SendMedia'" />
+         <section v-if="isLoading" class="m-auto">
+            <Loader />
+         </section>
+         <section v-else class="flex-fill">
+            <div v-if="posts.length" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 mt-1 justify-content-center m-auto">
+               <PostPreview
+                  v-for="post in posts"
+                  :key="post.id"
+                  :title="post.title"
+                  :image="post.image"
+                  :likes="post.Likes.length"
+                  :author="post.User.name"
+                  :avatar="post.User.avatar"
+                  :id="post.id"
+               />
+            </div>
+            <div v-else class="text-center mt-5">
+               <span class="fs-1">😟</span>
+               <p class="fs-4 link-primary">Aucun partage n'est disponible pour le moment !</p>
+            </div>
+         </section>
          <Footer />
       </main>
    </div>
@@ -41,29 +51,36 @@
 </style>
 
 <script>
-   const usertoken = localStorage.getItem("token");
+   let userToken = null;
+   let DB = null;
    const Axios = require("axios");
-   const DB = Axios.create({
-      baseURL: "http://localhost:3000/api/",
-      headers: {
-         authorization: `Bearer ${usertoken}`,
-      },
-   });
-
-   import Menu from "../components/Menu.vue";
-   import MenuSpacer from "../components/MenuSpacer.vue";
-   import PostPreview from "../components/PostPreview.vue";
-   import Footer from "../components/Footer.vue";
+   import Menu from "../components/menus/Menu.vue";
+   import MenuSpacer from "../components/menus/MenuSpacer.vue";
+   import SendMedia from "../components/forms/SendMedia.vue";
+   import Loader from "../components/utils/loader.vue";
+   import PostPreview from "../components/pages/home/PostPreview.vue";
+   import Footer from "../components/menus/Footer.vue";
    export default {
       name: "Home",
-      components: { Menu, MenuSpacer, PostPreview, Footer },
+      components: { Menu, MenuSpacer, SendMedia, Loader, PostPreview, Footer },
       data: function () {
          return {
+            isLoading: true,
             posts: [],
          };
       },
 
-      mounted() {
+      beforeCreate() {
+         userToken = localStorage.getItem("token");
+         DB = Axios.create({
+            baseURL: "http://localhost:3000/api/",
+            headers: {
+               authorization: `Bearer ${userToken}`,
+            },
+         });
+      },
+
+      created() {
          this.fetchPosts();
       },
 
@@ -72,6 +89,7 @@
          fetchPosts() {
             DB.get("posts").then((response) => {
                this.posts = response.data;
+               this.isLoading = false;
             });
          },
       },

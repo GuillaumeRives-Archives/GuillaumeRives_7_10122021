@@ -14,6 +14,8 @@ module.exports = {
                model: "Users",
                key: "id",
             },
+            onDelete: "no action",
+            onUpdate: "no action",
          },
          title: {
             type: Sequelize.STRING,

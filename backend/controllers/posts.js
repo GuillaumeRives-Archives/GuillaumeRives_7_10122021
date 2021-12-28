@@ -6,6 +6,8 @@ const Models = require("../models");
 const FileSystem = require("fs");
 const Jimp = require("jimp");
 
+const JimpSupportedFormats = ["image/jpg", "image/jpeg", "image/png"];
+
 //Création d'un post
 exports.createPost = (request, response) => {
    if (request.file) {
@@ -18,21 +20,25 @@ exports.createPost = (request, response) => {
       //Traitement de l'image pour la limiter à 400x400 px
       Jimp.read(`./images/posts/${request.file.filename}`)
          .then((output) => {
-            output.cover(config.jimp.postWidth, config.jimp.postWidth).write(`./images/posts/${request.file.filename}`);
+            if (JimpSupportedFormats.find((type) => type === output._originalMime)) {
+               output.scaleToFit(config.jimp.postWidth, config.jimp.postWidth).write(`./images/posts/${request.file.filename}`);
+            }
             //Création du post
             Models.Post.create(newPost)
-               .then(() => {
+               .then((result) => {
                   response.status(201).json({
                      message: "Votre post a bien été publié !",
+                     postId: result.id,
                   });
                })
                .catch((error) => {
                   response.status(500).json(error);
+                  console.log(error);
                });
          })
          .catch((error) => {
             FileSystem.unlink(`./images/posts/${request.file.filename}`, () => {
-               console.error(error);
+               console.error("Type d'image inconnu de Jimp");
             });
             response.status(500).json({
                message: "Une erreur est survenue lors du traitement de votre image !",

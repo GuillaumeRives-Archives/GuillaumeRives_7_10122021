@@ -1,7 +1,7 @@
 <template>
    <footer class="d-flex justify-content-around align-items-center mt-3">
-      <router-link to="/" class="link-primary">© {{ date }} Groupomania</router-link>
-      <router-link to="/" class="link-primary"> {{ postsCount }} partages</router-link>
+      <router-link to="/" class="link-primary footer-link">© {{ date }} Groupomania</router-link>
+      <router-link to="/" class="link-primary footer-link"> {{ postsCount }} partages</router-link>
    </footer>
 </template>
 
@@ -9,6 +9,11 @@
    footer {
       height: 90px;
       background: linear-gradient(rgba(#fd2d01, 0) 50%, rgba(#fd2d01, 0.2) 100%);
+      & > .footer-link {
+         display: inline-block;
+         height: 90px;
+         line-height: 90px;
+      }
    }
 </style>
 

@@ -42,7 +42,7 @@
                   </div>
                   <p class="description">{{ Post.description }}</p>
                   <span v-if="Viewer.userId === Post.User.id || Viewer.isadmin" class="d-flex align-items-center justify-content-end tools">
-                     <i class="bi bi-pencil-square me-2 fs-5" title="Modifier" data-bs-toggle="modal" data-bs-target="#UpdateMedia"></i>
+                     <i class="bi bi-pencil-square me-2 fs-5" data-bs-toggle="modal" title="Modifier" data-bs-target="#UpdateMedia"></i>
                      <i class="bi bi-trash-fill fs-5" title="Supprimer" data-bs-toggle="modal" data-bs-target="#DeleteMedia"></i>
                   </span>
                </div>
@@ -51,11 +51,12 @@
       </section>
       <UpdateMedia v-if="!Global.isLoading" :id="'UpdateMedia'" />
       <DeleteMedia v-if="!Global.isLoading" :id="'DeleteMedia'" />
+      <router-link v-if="!Global.isLoading" to="/" class="btn btn-primary m-auto mt-5">Retournez explorer la galerie !</router-link>
       <Footer class="modal-blur" />
    </main>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
    .recall-container {
       position: fixed;
       z-index: 0;
@@ -77,7 +78,7 @@
          width: 100%;
          height: 100%;
          backdrop-filter: blur(20px);
-         background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 90%);
+         background: linear-gradient(rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 90%);
       }
    }
 
@@ -113,9 +114,17 @@
 
    .tools > i {
       color: gray;
+      width: 35px;
+      height: 35px;
+      border-radius: 20px;
+      line-height: 35px;
+      background: white;
+      transition: all 0.15s ease-in-out;
       &:hover {
          cursor: pointer;
          color: #fd2d01;
+         -webkit-box-shadow: 0 0 15px 0 rgba(#000, 0.3);
+         box-shadow: 0 0 15px 0 rgba(#000, 0.3);
       }
    }
 

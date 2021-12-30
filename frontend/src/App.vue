@@ -6,11 +6,15 @@
    html,
    body,
    #app {
+      background: rgba(245, 245, 245, 1);
       .modal-open .modal-blur {
          filter: blur(15px);
       }
       .link-primary {
          color: #fd2d01;
+      }
+      .link:hover {
+         color: lighten(#fd2d01, 15);
       }
       .btn-primary {
          background-color: #fd2d01;

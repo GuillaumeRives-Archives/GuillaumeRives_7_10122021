@@ -8,11 +8,11 @@ const FileSystem = require("fs");
 const Jimp = require("jimp");
 
 //Récupération du profil
-exports.getProfile = (request, response) => {
+exports.getProfile = (_request, response) => {
    Models.User.findOne({
       attributes: ["name", "avatar", "createdAt", "isadmin"],
       where: {
-         id: request.body.userId,
+         id: response.locals.userId,
       },
    })
       .then((result) => {

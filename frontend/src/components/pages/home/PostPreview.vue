@@ -7,16 +7,16 @@
             {{ author }}
          </span>
          <span v-if="likes" class="likes-container"><i class="bi bi-heart-fill"></i> {{ likes }}</span>
-         <div class="text-white card-info">
+         <div class="card-info">
             <div class="card-title text-center">{{ title }}</div>
          </div>
       </div>
    </a>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
    .card {
-      border-radius: 10px !important;
+      border-radius: 13px !important;
       border: none !important;
 
       & > img {
@@ -27,14 +27,17 @@
 
       & .card-info {
          position: absolute;
-         background: rgba(#000, 0.4);
-         backdrop-filter: blur(10px);
+         background: rgba(#ffffff, 0.1);
+         backdrop-filter: blur(30px);
          text-overflow: ellipsis;
          width: 100%;
          height: 32px;
          line-height: 32px;
          bottom: 0;
+         left: 0;
          border-radius: 0 0 10px 10px;
+         color: white;
+         text-shadow: 0 0 4px rgba(0, 0, 0, 1);
       }
 
       & .likes-container {
@@ -42,10 +45,10 @@
          top: 0;
          right: 0;
          padding: 2px 8px;
-         background: rgba(#000, 0.4);
-         backdrop-filter: blur(10px);
+         background: rgba(#ffffff, 0.1);
+         backdrop-filter: blur(30px);
          border-radius: 0 10px 0 10px;
-         color: white;
+         color: rgb(41, 41, 41);
       }
 
       & .author-container {
@@ -54,7 +57,7 @@
          left: 0;
          color: white;
          padding: 8px;
-         text-shadow: 0 0 8px rgba(0, 0, 0, 1);
+         text-shadow: 0 0 4px rgba(0, 0, 0, 1);
 
          & .avatar {
             border-radius: 20px;
@@ -65,11 +68,11 @@
    .card-effect {
       position: relative;
       top: 0;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+      transition: all 0.1s ease-in-out;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
       &:hover {
          top: 15px;
-         box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.5);
+         box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.5);
       }
    }
 </style>

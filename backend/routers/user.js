@@ -9,7 +9,7 @@ const authorization = require("../middleware/authorization");
 const avatar = require("../middleware/avatar");
 
 //Récupératgion des informations de compte
-router.post("", userController.getProfile);
+router.post("", authorization, userController.getProfile);
 //Modification des informations de compte
 router.put("/update", authorization, userController.updateProfile);
 //Suppression du compte utilisateur

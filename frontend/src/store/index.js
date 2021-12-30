@@ -25,6 +25,13 @@ const store = createStore({
          postCreationDate: null,
          liked: false,
       },
+      profile: {
+         userId: null,
+         username: null,
+         avatar: null,
+         creationDate: null,
+         admin: false,
+      },
       allPosts: [],
       createdPost: null,
    },
@@ -71,6 +78,17 @@ const store = createStore({
       //Reset l'etat de chargement
       resetLoadingState(state) {
          state.global.isLoading = true;
+      },
+
+      //Met à jour les infos utilisateur
+      updateUser(state, data) {
+         let creationDate = new Date(data.createdAt);
+         let newDate = `publié le ${creationDate.toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" })}`;
+         state.profile.avatar = data.avatar;
+         state.profile.username = data.name;
+         state.profile.creationDate = newDate;
+         state.profile.admin = data.isadmin;
+         state.global.isLoading = false;
       },
    },
 
@@ -158,6 +176,31 @@ const store = createStore({
       switchLike({ dispatch }, payload) {
          DB.post("likes/switch", payload).then(() => {
             dispatch("loadPost", payload.postId);
+         });
+      },
+
+      //Récupère les informations du compte utilisateur
+      getUserInfo({ commit }) {
+         commit("resetLoadingState");
+         DB.post("user").then((response) => {
+            commit("updateUser", response.data);
+         });
+      },
+
+      //Met à jour l'image utilisateur
+      updateProfilePic({ commit, dispatch }, payload) {
+         commit("resetLoadingState");
+         let data = new FormData();
+         data.append("image", payload.file);
+         DB.put("user/profilePic", data).then((result) => {
+            dispatch("getUserInfo");
+         });
+      },
+
+      updateProfileName({ commit, dispatch }, payload) {
+         commit("resetLoadingState");
+         DB.put("user/update", payload).then((result) => {
+            dispatch("getUserInfo");
          });
       },
    },

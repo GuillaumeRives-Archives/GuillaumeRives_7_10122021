@@ -1,8 +1,8 @@
 <template>
    <main class="d-flex flex-column">
-      <Menu />
+      <Menu class="modal-blur" />
       <MenuSpacer />
-      <section class="container-fluid text-center p-4 cta">
+      <section class="container-fluid text-center p-4 cta modal-blur">
          <p class="fst-italic link-primary">
             Explorez le contenu multimédia partagé par vos collègue dans cette galerie, n'hésitez pas à ouvrir une carte pour en savoir plus !
          </p>
@@ -12,17 +12,17 @@
          </div>
       </section>
       <SendMedia :id="'SendMedia'" />
-      <section v-if="Global.isLoading" class="m-auto">
+      <section v-if="Global.isLoading" class="m-auto modal-blur">
          <Loader />
       </section>
-      <section v-else class="flex-fill">
+      <section v-else class="flex-fill modal-blur">
          <div v-if="Posts.length" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 mt-1 justify-content-center m-auto">
             <PostPreview
                v-for="post in Posts"
                :key="post.id"
                :title="post.title"
                :image="post.image"
-               :likes="post.Likes.length"
+               :likes="nbLikes(post.Likes)"
                :author="post.User.name"
                :avatar="post.User.avatar"
                :id="post.id"
@@ -32,7 +32,7 @@
             <ErrorBlock :title="'Oh non !'" :message="'Il semblerait qu\'il n\'y ait pas encore de post !'" :emoji="'😟'" :enableCta="false" />
          </div>
       </section>
-      <Footer />
+      <Footer class="modal-blur" />
    </main>
 </template>
 
@@ -82,6 +82,15 @@
          //Récupération de tous les posts pour leur affichage sur la page d'accueil
          fetchPosts() {
             this.getAllPosts();
+         },
+
+         //Récupère le nombre de likes
+         nbLikes(likes) {
+            let count = 0;
+            likes.forEach((like) => {
+               like.likeState ? count++ : null;
+            });
+            return count;
          },
       },
    };

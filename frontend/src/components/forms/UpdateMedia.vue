@@ -1,5 +1,5 @@
 <template>
-   <div class="modal" :id="id" tabindex="-1" :aria-labelledby="id + 'Label'" aria-hidden="true">
+   <div class="modal fade" :id="id" tabindex="-1" :aria-labelledby="id + 'Label'" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
@@ -15,6 +15,7 @@
                   </div>
                </div>
                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                   <button @click.prevent="update" type="submit" class="btn btn-primary">Partagez !</button>
                </div>
             </form>
@@ -22,12 +23,6 @@
       </div>
    </div>
 </template>
-
-<style lang="scss">
-   .modal {
-      backdrop-filter: blur(50px);
-   }
-</style>
 
 <script>
    import { mapActions, mapMutations } from "vuex";

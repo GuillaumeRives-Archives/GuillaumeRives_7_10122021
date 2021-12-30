@@ -6,6 +6,9 @@
    html,
    body,
    #app {
+      .modal-open .modal-blur {
+         filter: blur(15px);
+      }
       .link-primary {
          color: #fd2d01;
       }

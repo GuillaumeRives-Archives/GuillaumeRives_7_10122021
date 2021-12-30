@@ -61,28 +61,3 @@ exports.switch = (request, response) => {
          response.status(500).json(error);
       });
 };
-
-//Récupération du nombre de likes d'un post
-exports.getPostLikes = (request, response) => {
-   Models.Like.findAll({
-      where: {
-         PostId: request.params.id,
-      },
-   })
-      .then((posts) => {
-         if (posts.length) {
-            let count = 0;
-            posts.forEach((post) => {
-               post.likeState ? count++ : null;
-            });
-            response.status(200).json(count);
-         } else {
-            response.status(404).json({
-               message: "Ce post n'a pas été trouvé !",
-            });
-         }
-      })
-      .catch((error) => {
-         response.status(500).json(error);
-      });
-};

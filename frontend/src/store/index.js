@@ -23,6 +23,7 @@ const store = createStore({
          post: null,
          viewer: null,
          postCreationDate: null,
+         liked: false,
       },
       allPosts: [],
       createdPost: null,
@@ -36,10 +37,19 @@ const store = createStore({
 
       //Modifie le post dans le store
       setPost(state, data) {
+         state.postView.liked = false;
          state.postView.post = data.post;
          state.postView.viewer = data.viewer;
          state.postView.postCreationDate = data.date;
          state.global.isLoading = data.loadingState;
+         for (let like of data.post.Likes) {
+            if (like.UserId === data.viewer.userId) {
+               if (like.likeState) {
+                  state.postView.liked = true;
+               }
+               break;
+            }
+         }
       },
 
       //Défini le post nouvellement créé
@@ -141,6 +151,13 @@ const store = createStore({
          DB.delete("posts/delete", { data: payload }).then(() => {
             dispatch("getAllPosts");
             console.log("Post supprimé !");
+         });
+      },
+
+      //Like et dislike
+      switchLike({ dispatch }, payload) {
+         DB.post("likes/switch", payload).then(() => {
+            dispatch("loadPost", payload.postId);
          });
       },
    },

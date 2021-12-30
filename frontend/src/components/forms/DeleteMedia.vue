@@ -1,5 +1,5 @@
 <template>
-   <div class="modal" :id="id" tabindex="-1">
+   <div class="modal fade" :id="id" tabindex="-1">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
@@ -17,12 +17,6 @@
       </div>
    </div>
 </template>
-
-<style lang="scss">
-   .modal {
-      backdrop-filter: blur(50px);
-   }
-</style>
 
 <script>
    import { mapActions } from "vuex";

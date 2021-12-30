@@ -9,7 +9,5 @@ const authorization = require("../middleware/authorization");
 
 //Ajout / suppression d'un like
 router.post("/switch", authorization, likeController.switch);
-//Récupération du nombre de likes d'un post
-router.get("/post/:id", likeController.getPostLikes);
 
 module.exports = router;

@@ -1,10 +1,10 @@
 <template>
-   <div class="modal" :id="id" tabindex="-1" :aria-labelledby="id + 'Label'" aria-hidden="true">
+   <div class="modal" :id="id" tabindex="-1" data-bs-backdrop="static" :aria-labelledby="id + 'Label'" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
                <h5 class="modal-title" :id="id + 'Label'">Partagez du contenu !</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               <button v-if="!Global.isLoading" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form>
                <div class="modal-body">
@@ -14,8 +14,11 @@
                   <div v-if="Server.serverResponseMessage !== ''" class="alert mt-3 mb-0" :class="Server.serverResponseType">
                      <i class="bi bi-exclamation-triangle-fill"></i> {{ Server.serverResponseMessage }}
                   </div>
+                  <div v-if="Global.isLoading" class="text-center mt-3">
+                     <Loader />
+                  </div>
                </div>
-               <div class="modal-footer">
+               <div class="modal-footer" v-if="!Global.isLoading">
                   <button @click.prevent="create" type="submit" class="btn btn-primary">Partagez !</button>
                </div>
             </form>
@@ -31,17 +34,24 @@
 </style>
 
 <script>
+   import Loader from "../../components/utils/miniLoader.vue";
    import { mapActions, mapMutations } from "vuex";
    import { Modal } from "bootstrap";
 
    export default {
       props: ["id"],
+      components: { Loader },
       data() {
          return {
             title: null,
             description: null,
-            interval: null,
          };
+      },
+
+      updated() {
+         if (this.Store.createdPost) {
+            this.redirectToPost(this.Store.createdPost);
+         }
       },
 
       computed: {
@@ -59,16 +69,9 @@
          },
       },
 
-      updated() {
-         if (this.Store.createdPost) {
-            setTimeout(() => this.redirectToPost(this.Store.createdPost), this.Global.timeToRedirection * 1000);
-            this.interval = setInterval(() => this.changeAlertTimeToRedirection(), 1000);
-         }
-      },
-
       methods: {
          ...mapActions(["createPost"]),
-         ...mapMutations(["decreaseTimeToRedirect", "updateServerResponse", "resetCreatedPost"]),
+         ...mapMutations(["updateServerResponse", "resetCreatedPost"]),
          create() {
             let data = {
                file: this.$refs.mediaFile.files[0],
@@ -76,19 +79,14 @@
                description: this.description,
             };
             this.createPost(data);
-         },
-
-         changeAlertTimeToRedirection() {
-            this.decreaseTimeToRedirect();
-            let data = {
+            let message = {
                type: "alert-success",
-               message: `Votre partage a bien été publié ! Vous serez redirigé(e) dans ${this.Global.timeToRedirection} secondes.`,
+               message: `Votre partage a bien été publié ! Veuillez patienter le temps que nous vous redirigions...`,
             };
-            this.updateServerResponse(data);
+            this.updateServerResponse(message);
          },
 
          redirectToPost(id) {
-            clearInterval(this.interval);
             this.resetCreatedPost();
             let form = document.getElementById(this.$props.id);
             let formModal = Modal.getInstance(form);

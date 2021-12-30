@@ -10,8 +10,6 @@ DB.interceptors.request.use((config) => {
    return config;
 });
 
-const DEFAULT_REDIRECT_TIME = 3;
-
 const store = createStore({
    state: {
       server: {
@@ -20,7 +18,6 @@ const store = createStore({
       },
       global: {
          isLoading: true,
-         timeToRedirection: DEFAULT_REDIRECT_TIME,
       },
       postView: {
          post: null,
@@ -61,16 +58,6 @@ const store = createStore({
          state.server.serverResponseMessage = data.message;
       },
 
-      //Reset le temps de redirection dans le store
-      resetTimeToRedirect(state) {
-         state.global.timeToRedirection = DEFAULT_REDIRECT_TIME;
-      },
-
-      //Décrémente le temps de redirection dans le store
-      decreaseTimeToRedirect(state) {
-         state.global.timeToRedirection--;
-      },
-
       //Reset l'etat de chargement
       resetLoadingState(state) {
          state.global.isLoading = true;
@@ -108,6 +95,7 @@ const store = createStore({
 
       //Crée un partage
       createPost({ commit, getters }, payload) {
+         commit("resetLoadingState");
          let data = new FormData();
          data.append("title", payload.title);
          data.append("description", payload.description);
@@ -132,17 +120,11 @@ const store = createStore({
       },
 
       //Met à jour un post
-      updatePost({ dispatch, getters, commit }, payload) {
-         commit("resetTimeToRedirect");
+      updatePost({ dispatch, commit }, payload) {
+         commit("resetLoadingState");
          DB.put("posts/update", payload)
             .then(() => {
                dispatch("loadPost", payload.id);
-               let timeToRedirect = getters.getTimeToRedirect;
-               let data = {
-                  type: "alert-success",
-                  message: `Votre partage a bien été publié ! Vous serez redirigé(e) dans ${timeToRedirect} secondes.`,
-               };
-               commit("updateServerResponse", data);
             })
             .catch(() => {
                let data = {
@@ -162,12 +144,7 @@ const store = createStore({
          });
       },
    },
-   getters: {
-      //Récupère le temps de redirection
-      getTimeToRedirect(state) {
-         return state.global.timeToRedirection;
-      },
-   },
+   getters: {},
 });
 
 export default store;

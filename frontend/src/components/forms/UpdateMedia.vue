@@ -35,15 +35,7 @@
 
    export default {
       props: ["id"],
-      data() {
-         return {
-            interval: null,
-         };
-      },
       computed: {
-         Global() {
-            return this.$store.state.global;
-         },
          Server() {
             return this.$store.state.server;
          },
@@ -51,9 +43,10 @@
             return this.$store.state.postView.post;
          },
       },
+
       methods: {
          ...mapActions(["updatePost"]),
-         ...mapMutations(["decreaseTimeToRedirect", "updateServerResponse"]),
+         ...mapMutations(["updateServerResponse"]),
          //Envoie une requête d'update d'un post au store
          update() {
             const payload = {
@@ -62,21 +55,15 @@
                description: this.Post.description,
             };
             this.updatePost(payload);
-            setTimeout(() => this.redirectToPost(this.$route.params.id), this.Global.timeToRedirection * 1000);
-            this.interval = setInterval(() => this.changeAlertTimeToRedirection(), 1000);
-         },
-
-         changeAlertTimeToRedirection() {
-            this.decreaseTimeToRedirect();
             let data = {
                type: "alert-success",
-               message: `Votre partage a bien été publié ! Vous serez redirigé(e) dans ${this.Global.timeToRedirection} secondes.`,
+               message: `Votre partage a bien été modifié ! Veuillez patienter le temps que nous vous redirigions...`,
             };
             this.updateServerResponse(data);
+            this.redirectToPost(this.Post.id);
          },
 
          redirectToPost(id) {
-            clearInterval(this.interval);
             let form = document.getElementById(this.$props.id);
             let formModal = Modal.getInstance(form);
             formModal.hide();

@@ -21,7 +21,7 @@ exports.createPost = (request, response) => {
       Jimp.read(`./images/posts/${request.file.filename}`)
          .then((output) => {
             if (JimpSupportedFormats.find((type) => type === output._originalMime)) {
-               output.scaleToFit(config.jimp.postWidth, config.jimp.postWidth).write(`./images/posts/${request.file.filename}`);
+               output.cover(config.jimp.postWidth, config.jimp.postWidth).write(`./images/posts/${request.file.filename}`);
             }
             //Création du post
             Models.Post.create(newPost)
@@ -89,9 +89,13 @@ exports.getPost = (request, response) => {
    })
       .then((post) => {
          if (post) {
-            response.status(200).json(post);
+            let viewer = {
+               userId: response.locals.userId,
+               isadmin: response.locals.isadmin,
+            };
+            response.status(200).json({ post, viewer });
          } else {
-            response.status(200).json({
+            response.status(404).json({
                message: "Ce post n'a pas été trouvé...",
             });
          }
@@ -104,21 +108,21 @@ exports.getPost = (request, response) => {
 //Mise à jour d'un post
 exports.updatePost = (request, response) => {
    Models.Post.findOne({
-      attributes: ["id", "userId", "image", "title", "description"],
+      attributes: ["id", "userId", "title", "description"],
       where: {
          id: request.body.id,
       },
    })
       .then((post) => {
          if (post) {
-            if (post.UserId === response.locals.userId || response.locals.isadmin) {
+            if ((post.UserId = response.locals.userId || response.locals.isadmin)) {
                const modifiedPost = {
                   title: request.body.title,
                   description: request.body.description,
                };
                Models.Post.update(modifiedPost, {
                   where: {
-                     id: post.id,
+                     id: request.body.id,
                   },
                })
                   .then(() => {
@@ -142,6 +146,7 @@ exports.updatePost = (request, response) => {
       })
       .catch((error) => {
          response.status(500).json(error);
+         console.error(error);
       });
 };
 

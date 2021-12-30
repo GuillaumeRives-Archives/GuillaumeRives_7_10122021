@@ -14,9 +14,9 @@ router.post("/create", authorization, postImage, postController.createPost);
 //Récupération de tous les posts
 router.get("", authorization, postController.getAllPosts);
 //Récupération d'un post
-router.get("/:id", authorization, postController.getPost);
+router.get("/:id/details", authorization, adminCheck, postController.getPost);
 //Modification d'un post
-router.put("/update", authorization, adminCheck, postImage, postController.updatePost);
+router.put("/update", authorization, adminCheck, postController.updatePost);
 //Suppression d'un post
 router.delete("/delete", authorization, adminCheck, postController.deletePost);
 

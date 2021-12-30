@@ -26,7 +26,7 @@
                </li>
 
                <li class="nav-item">
-                  <router-link class="nav-link" to="Authenticate" @click="logout()"><i class="bi bi-toggle-off"></i> Se déconnecter</router-link>
+                  <router-link class="nav-link" :to="{ name: 'Authenticate' }" @click="logout()"><i class="bi bi-toggle-off"></i> Se déconnecter</router-link>
                </li>
             </ul>
          </div>

@@ -8,15 +8,14 @@
             </div>
             <form>
                <div class="modal-body">
-                  <input v-model="title" class="form-control" placeholder="Titre" type="text" name="mediaTitle" required />
-                  <input ref="mediaFile" class="form-control mt-3" placeholder="Votre image" type="file" name="mediaFile" required />
-                  <textarea v-model="description" class="form-control mt-3" name="mediaDescription" placeholder="Description" cols="30" rows="5" required></textarea>
+                  <input v-model="Post.title" class="form-control" placeholder="Titre" type="text" name="mediaTitle" required />
+                  <textarea v-model="Post.description" class="form-control mt-3" name="mediaDescription" placeholder="Description" cols="30" rows="5" required></textarea>
                   <div v-if="Server.serverResponseMessage !== ''" class="alert mt-3 mb-0" :class="Server.serverResponseType">
                      <i class="bi bi-exclamation-triangle-fill"></i> {{ Server.serverResponseMessage }}
                   </div>
                </div>
                <div class="modal-footer">
-                  <button @click.prevent="create" type="submit" class="btn btn-primary">Partagez !</button>
+                  <button @click.prevent="update" type="submit" class="btn btn-primary">Partagez !</button>
                </div>
             </form>
          </div>
@@ -38,44 +37,33 @@
       props: ["id"],
       data() {
          return {
-            title: null,
-            description: null,
             interval: null,
          };
       },
-
       computed: {
          Global() {
             return this.$store.state.global;
          },
-         Store() {
-            return this.$store.state;
-         },
          Server() {
             return this.$store.state.server;
          },
-         PostView() {
-            return this.$store.state.postView;
+         Post() {
+            return this.$store.state.postView.post;
          },
       },
-
-      updated() {
-         if (this.Store.createdPost) {
-            setTimeout(() => this.redirectToPost(this.Store.createdPost), this.Global.timeToRedirection * 1000);
-            this.interval = setInterval(() => this.changeAlertTimeToRedirection(), 1000);
-         }
-      },
-
       methods: {
-         ...mapActions(["createPost"]),
-         ...mapMutations(["decreaseTimeToRedirect", "updateServerResponse", "resetCreatedPost"]),
-         create() {
-            let data = {
-               file: this.$refs.mediaFile.files[0],
-               title: this.title,
-               description: this.description,
+         ...mapActions(["updatePost"]),
+         ...mapMutations(["decreaseTimeToRedirect", "updateServerResponse"]),
+         //Envoie une requête d'update d'un post au store
+         update() {
+            const payload = {
+               id: this.Post.id,
+               title: this.Post.title,
+               description: this.Post.description,
             };
-            this.createPost(data);
+            this.updatePost(payload);
+            setTimeout(() => this.redirectToPost(this.$route.params.id), this.Global.timeToRedirection * 1000);
+            this.interval = setInterval(() => this.changeAlertTimeToRedirection(), 1000);
          },
 
          changeAlertTimeToRedirection() {
@@ -89,7 +77,6 @@
 
          redirectToPost(id) {
             clearInterval(this.interval);
-            this.resetCreatedPost();
             let form = document.getElementById(this.$props.id);
             let formModal = Modal.getInstance(form);
             formModal.hide();

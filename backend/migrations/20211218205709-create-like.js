@@ -23,7 +23,7 @@ module.exports = {
                model: "Posts",
                key: "id",
             },
-            onDelete: "no action",
+            onDelete: "cascade",
             onUpdate: "no action",
          },
          likeState: {

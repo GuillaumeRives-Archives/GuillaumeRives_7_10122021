@@ -164,18 +164,6 @@ exports.deleteProfile = (_request, response) => {
                            console.error(`Une erreur est survenue lors de la suppression des posts du l'utilisateur ${response.locals.userId}`);
                         });
                   }
-                  //Suppression des likes
-                  Models.Like.destroy({
-                     where: {
-                        userId: response.locals.userId,
-                     },
-                  })
-                     .then(() => {
-                        console.log(`Likes de l'utilisateur ${response.locals.userId} supprimé avec succès...`);
-                     })
-                     .catch(() => {
-                        console.error(`Une erreur est survenue lors de la suppression des likes du l'utilisateur ${response.locals.userId}`);
-                     });
 
                   //Suppression de l'avatar de l'utilisateur
                   const img = user.avatar.split("/images/avatars/")[1];

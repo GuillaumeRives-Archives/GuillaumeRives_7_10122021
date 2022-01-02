@@ -115,7 +115,8 @@ Here are the dependencies listed in **package.json** of the back-end side and fr
       "bootstrap-icons": "^1.7.2",
       "core-js": "^3.6.5",
       "vue": "^3.0.0",
-      "vue-router": "^4.0.0-0"
+      "vue-router": "^4.0.0-0",
+      "vuex": "^4.0.2"
    },
 "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

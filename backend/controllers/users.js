@@ -228,19 +228,27 @@ exports.changePassword = (request, response) => {
                         )
                            .then(() => {
                               response.status(200).json({
+                                 code: 1,
                                  message: "Mot de passe modifié avec succès",
                               });
                            })
-                           .catch((error) => {
-                              response.status(500).json(error);
+                           .catch(() => {
+                              response.status(202).json({
+                                 code: 0,
+                                 message: "Une erreur est survenue lors du traitement de votre demande",
+                              });
                            });
                      })
-                     .catch((error) => {
-                        response.status(500).json(error);
+                     .catch(() => {
+                        response.status(202).json({
+                           code: 0,
+                           message: "Une erreur est survenue lors du traitement de votre demande",
+                        });
                      });
                } else {
-                  response.status(500).json({
-                     message: "Mot de passe incorrect !",
+                  response.status(202).json({
+                     code: 0,
+                     message: "Votre ancien mot de passe n'a pas pu être vérifié !",
                   });
                }
             });
@@ -250,7 +258,10 @@ exports.changePassword = (request, response) => {
             });
          }
       })
-      .catch((error) => {
-         response.status(500).json(error);
+      .catch(() => {
+         response.status(202).json({
+            code: 0,
+            message: "Une erreur est survenue lors du traitement de votre demande",
+         });
       });
 };

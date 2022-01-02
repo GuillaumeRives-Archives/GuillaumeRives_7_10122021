@@ -7,11 +7,11 @@
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               <p>Etes-vous vraiment sûr(e) de vouloir supprimer ce partage ?</p>
+               <p>Etes-vous vraiment sûr(e) de vouloir supprimer votre compte ?</p>
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-               <button type="button" class="btn btn-primary" @click="dropPost">Valider</button>
+               <button type="button" class="btn btn-primary" @click="deleteAccount">Valider</button>
             </div>
          </div>
       </div>
@@ -24,23 +24,14 @@
 
    export default {
       props: ["id"],
-      computed: {
-         Post() {
-            return this.$store.state.postView.post;
-         },
-      },
       methods: {
-         ...mapActions(["deletePost"]),
+         ...mapActions(["deleteProfile"]),
          //Envoie une requête d'update d'un post au store
-         dropPost() {
-            const payload = {
-               id: this.Post.id,
-            };
-            this.deletePost(payload);
+         deleteAccount() {
             let form = document.getElementById(this.$props.id);
             let formModal = Modal.getInstance(form);
             formModal.hide();
-            this.$router.push("/");
+            this.deleteProfile();
          },
       },
    };

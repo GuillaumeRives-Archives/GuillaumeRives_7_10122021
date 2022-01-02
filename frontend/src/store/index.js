@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import Router from "../router";
 
 import Axios from "axios";
 const DB = Axios.create({
@@ -197,14 +198,56 @@ const store = createStore({
          });
       },
 
+      //Met à jour le nom de profil de l'utilisateur
       updateProfileName({ commit, dispatch }, payload) {
          commit("resetLoadingState");
          DB.put("user/update", payload).then((result) => {
             dispatch("getUserInfo");
          });
       },
+
+      //Met à jour le mot de passe de l'utilisateur
+      updateProfilePassword({ commit }, payload) {
+         // commit("resetLoadingState");
+         DB.put("user/changePassword", payload)
+            .then((result) => {
+               let messageType = "";
+               switch (result.data.code) {
+                  case 0:
+                     messageType = "alert-danger";
+                     break;
+
+                  default:
+                     messageType = "alert-success";
+                     break;
+               }
+               let message = {
+                  type: messageType,
+                  message: result.data.message,
+               };
+               commit("updateServerResponse", message);
+            })
+            .catch((error) => {
+               let message = {
+                  type: "alert-danger",
+                  message: error.message,
+               };
+               commit("updateServerResponse", message);
+            });
+      },
+
+      //Supprime l'utilisateur
+      deleteProfile({ commit }) {
+         DB.delete("user/delete")
+            .then((result) => {
+               localStorage.clear();
+               Router.push("/Authenticate");
+            })
+            .catch((error) => {
+               console.error(error);
+            });
+      },
    },
-   getters: {},
 });
 
 export default store;

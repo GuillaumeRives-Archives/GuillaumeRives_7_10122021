@@ -14,7 +14,7 @@ module.exports = {
                model: "Users",
                key: "id",
             },
-            onDelete: "no action",
+            onDelete: "cascade",
             onUpdate: "no action",
          },
          postId: {

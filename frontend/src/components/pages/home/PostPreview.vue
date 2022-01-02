@@ -38,6 +38,12 @@
          border-radius: 0 0 10px 10px;
          color: white;
          text-shadow: 0 0 4px rgba(0, 0, 0, 1);
+
+         & .card-title {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+         }
       }
 
       & .likes-container {

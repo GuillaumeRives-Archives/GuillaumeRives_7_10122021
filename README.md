@@ -14,7 +14,7 @@ The prerequisites for this module are :
 
 > You **MUST** have a SQL database in order to run this project. You can install one via softwares like [WampServer](https://www.wampserver.com/), [EasyPHP](https://www.easyphp.org/), [Uwamp](https://www.uwamp.com/), etc.
 
-Create a user with his own database those infos will be used in the next part
+Create a user with his own database, those info will be used in the next part.
 
 ### Config file
 

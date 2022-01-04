@@ -47,7 +47,7 @@
    export default {
       beforeMount() {
          if (!localStorage.getItem("token")) {
-            this.$router.push("Authenticate");
+            this.$router.push("/Authenticate");
          }
       },
       methods: {
